@@ -18,6 +18,8 @@ class CPU
       void execute();
       void loadRAM(CPURam* ram);
       unsigned int cycleCount;
+      void saveState(std::ostream& os);
+      void loadState(std::istream& os);
    private:
 
       //Registers

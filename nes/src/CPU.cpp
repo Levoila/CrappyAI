@@ -314,6 +314,28 @@ void CPU::execute()
    (this->*uPrograms[op])();   
 }
 
+void CPU::saveState(std::ostream& os)
+{
+	os.write((char*)(&PC), sizeof(PC));
+	os.write((char*)(&A), sizeof(A));
+	os.write((char*)(&X), sizeof(X));
+	os.write((char*)(&Y), sizeof(Y));
+	os.write((char*)(&S), sizeof(S));
+	os.write((char*)(&P.raw), sizeof(P.raw));
+	ram->saveState(os);
+}
+
+void CPU::loadState(std::istream& os)
+{
+	os.read((char*)(&PC), sizeof(PC));
+	os.read((char*)(&A), sizeof(A));
+	os.read((char*)(&X), sizeof(X));
+	os.read((char*)(&Y), sizeof(Y));
+	os.read((char*)(&S), sizeof(S));
+	os.read((char*)(&P.raw), sizeof(P.raw));
+	ram->loadState(os);
+}
+
 void CPU::loadRAM(CPURam* ram)
 {
    this->ram = ram;

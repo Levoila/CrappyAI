@@ -6,6 +6,8 @@
 #include "CPU.h"
 #include "PPU.h"
 
+#include <iostream>
+
 class CPU;
 
 class CPURam
@@ -15,11 +17,15 @@ class CPURam
    void write(uint16_t address, uint8_t data);
    uint8_t read(uint16_t address);
    void loadROM(std::vector<uint8_t*> rom);
+   void saveState(std::ostream& os);
+   void loadState(std::istream& os);
+   void setController1(uint8_t state) { controller1State = state; }
 
    private:
    uint8_t mem[0x10001];
    bool controllerStrobe;
    uint8_t controller1;
+   uint8_t controller1State;
    CPU* cpu;
    PPU* ppu;
 

@@ -625,6 +625,80 @@ bool PPU::isFrameReady()
    return ready;
 }
 
+void PPU::saveState(std::ostream& os)
+{
+	os.write((char*)(&CTRL), sizeof(CTRL));
+	os.write((char*)(&MASK), sizeof(MASK));
+	os.write((char*)(&STATUS), sizeof(STATUS));
+	os.write((char*)(&SCROLL), sizeof(SCROLL));
+	os.write((char*)(&ADDR), sizeof(ADDR));
+	os.write((char*)(&DATA), sizeof(DATA));
+	os.write((char*)(&OAMADDR), sizeof(OAMADDR));
+	os.write((char*)(&OAMDATA), sizeof(OAMDATA));
+	os.write((char*)(&DATA_READ_BUFFER), sizeof(DATA_READ_BUFFER));
+	os.write((char*)(&cVAddr), sizeof(cVAddr));
+	os.write((char*)(&tVAddr), sizeof(tVAddr));
+	os.write((char*)(&fineXScroll), sizeof(fineXScroll));
+	os.write((char*)(&writeToggle), sizeof(writeToggle));
+	os.write((char*)(tileBMPShift), 2 * sizeof(uint16_t));
+	os.write((char*)(&paletteShift), 2 * sizeof(uint16_t));
+	   
+	os.write((char*)primaryOAM, 256);
+	os.write((char*)secondaryOAM, 32);
+	os.write((char*)spriteBMPShift, 2*8);
+	os.write((char*)spriteAttribute, 8);
+	os.write((char*)xPosCounter, 8);
+	os.write((char*)activeSprite, 8);
+	os.write((char*)activeCounter, 8);
+	
+	os.write((char*)(&spriteZeroActive), sizeof(spriteZeroActive));
+	os.write((char*)(&spriteZeroActiveNextScanline), sizeof(spriteZeroActiveNextScanline));
+	os.write((char*)(&scanlineNb), sizeof(scanlineNb));
+	os.write((char*)(&pixelNb), sizeof(pixelNb));
+	os.write((char*)(&oddFrame), sizeof(oddFrame));
+	os.write((char*)(&NMISignal), sizeof(NMISignal));
+	os.write((char*)(&frameReady), sizeof(frameReady));
+	   
+	ram.saveState(os);
+}
+
+void PPU::loadState(std::istream& os)
+{	   
+	os.read((char*)(&CTRL), sizeof(CTRL));
+	os.read((char*)(&MASK), sizeof(MASK));
+	os.read((char*)(&STATUS), sizeof(STATUS));
+	os.read((char*)(&SCROLL), sizeof(SCROLL));
+	os.read((char*)(&ADDR), sizeof(ADDR));
+	os.read((char*)(&DATA), sizeof(DATA));
+	os.read((char*)(&OAMADDR), sizeof(OAMADDR));
+	os.read((char*)(&OAMDATA), sizeof(OAMDATA));
+	os.read((char*)(&DATA_READ_BUFFER), sizeof(DATA_READ_BUFFER));
+	os.read((char*)(&cVAddr), sizeof(cVAddr));
+	os.read((char*)(&tVAddr), sizeof(tVAddr));
+	os.read((char*)(&fineXScroll), sizeof(fineXScroll));
+	os.read((char*)(&writeToggle), sizeof(writeToggle));
+	os.read((char*)(tileBMPShift), 2 * sizeof(uint16_t));
+	os.read((char*)(&paletteShift), 2 * sizeof(uint16_t));
+	   
+	os.read((char*)primaryOAM, 256);
+	os.read((char*)secondaryOAM, 32);
+	os.read((char*)spriteBMPShift, 2*8);
+	os.read((char*)spriteAttribute, 8);
+	os.read((char*)xPosCounter, 8);
+	os.read((char*)activeSprite, 8);
+	os.read((char*)activeCounter, 8);
+	
+	os.read((char*)(&spriteZeroActive), sizeof(spriteZeroActive));
+	os.read((char*)(&spriteZeroActiveNextScanline), sizeof(spriteZeroActiveNextScanline));
+	os.read((char*)(&scanlineNb), sizeof(scanlineNb));
+	os.read((char*)(&pixelNb), sizeof(pixelNb));
+	os.read((char*)(&oddFrame), sizeof(oddFrame));
+	os.read((char*)(&NMISignal), sizeof(NMISignal));
+	os.read((char*)(&frameReady), sizeof(frameReady));
+	   
+	ram.loadState(os);
+}
+
 void PPU::renderWindow()
 {
    /*sf::Image img;

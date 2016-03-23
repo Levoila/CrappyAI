@@ -17,6 +17,9 @@ public:
 	
 	void loadROM(std::string filename);
 	uint32_t* emulateNextFrame();
+	void setController1State(uint8_t state);
+	void saveState(std::string filename);
+	void loadState(std::string filename);
 private:
 	PPU* ppu;
 	CPU* cpu;

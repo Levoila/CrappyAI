@@ -26,6 +26,20 @@ void CPURam::loadROM(vector<uint8_t*> rom) {
    }
 }
 
+void CPURam::saveState(std::ostream& os)
+{
+	os.write((char*)(&controller1), sizeof(controller1));
+	os.write((char*)(&controllerStrobe), sizeof(controllerStrobe));
+	os.write((char*)mem, sizeof(char)*0x10001);
+}
+
+void CPURam::loadState(std::istream& os)
+{
+	os.read((char*)(&controller1), sizeof(controller1));
+	os.read((char*)(&controllerStrobe), sizeof(controllerStrobe));
+	os.read((char*)mem, sizeof(char)*0x10001);
+}
+
 void CPURam::write(uint16_t address, uint8_t data)
 {
    //cout << "Writing to " << hex << (unsigned int)address << " : " << (unsigned int)data << dec << endl;
@@ -94,25 +108,7 @@ uint32_t CPURam::decode(uint16_t addr, bool w, uint8_t d)
 			if(w) {
 				if(d & 0x1) {
 					controllerStrobe = true;
-					/*if(sf::Joystick::isConnected(0)) {
-						controller1 =    (sf::Joystick::isButtonPressed(0, 0) ? 0x1 : 0) |
-										 ((sf::Joystick::isButtonPressed(0, 1) || sf::Joystick::isButtonPressed(0, 2)) ? 0x2 : 0) |
-										 (sf::Joystick::isButtonPressed(0, 6) ? 0x4 : 0) |
-										 (sf::Joystick::isButtonPressed(0, 7) ? 0x8 : 0) |
-										 ((sf::Joystick::getAxisPosition(0, sf::Joystick::PovX) > 1) ? 0x10 : 0) |
-										 ((sf::Joystick::getAxisPosition(0, sf::Joystick::PovX) < -1) ? 0x20 : 0) |
-										 ((sf::Joystick::getAxisPosition(0, sf::Joystick::PovY) < -1) ? 0x40 : 0) |
-										 ((sf::Joystick::getAxisPosition(0, sf::Joystick::PovY) > 1) ? 0x80 : 0) ;
-					} else {
-						controller1 =    (sf::Keyboard::isKeyPressed(sf::Keyboard::L) ? 0x1 : 0) |
-										 (sf::Keyboard::isKeyPressed(sf::Keyboard::M) ? 0x2 : 0) |
-										 (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace) ? 0x4 : 0) |
-										 (sf::Keyboard::isKeyPressed(sf::Keyboard::Return) ? 0x8 : 0) |
-										 (sf::Keyboard::isKeyPressed(sf::Keyboard::W) ? 0x10 : 0) |
-										 (sf::Keyboard::isKeyPressed(sf::Keyboard::S) ? 0x20 : 0) |
-										 (sf::Keyboard::isKeyPressed(sf::Keyboard::A) ? 0x40 : 0) |
-										 (sf::Keyboard::isKeyPressed(sf::Keyboard::D) ? 0x80 : 0) ;
-					}*/
+					controller1 = controller1State;
 					mem[0x4016] = controller1 & 0x01;
 					mem[0x4017] = (mem[0x4017] & 0xC0) | (controller1 & 0x01);
 				} else {

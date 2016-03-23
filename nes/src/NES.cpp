@@ -32,6 +32,31 @@ uint32_t* NES::emulateNextFrame()
 	while(!ppu->isFrameReady()) {
 		cpu->execute();
 	}
-	std::cout << "Frame ptr : " << ppu->getFrame() << std::endl;
 	return ppu->getFrame();
+}
+
+void NES::setController1State(uint8_t state)
+{
+	ram.setController1(state);
+}
+
+void NES::saveState(std::string filename)
+{
+	std::ofstream file(filename.c_str(), std::ios::binary);
+	
+	cpu->saveState(file);
+	ppu->saveState(file);
+}
+
+void NES::loadState(std::string filename)
+{
+	std::ifstream file(filename.c_str(), std::ios::binary);
+	
+	if (!file) {
+		std::cout << "File " << filename << "does not exist." << std::endl;
+		return;
+	}
+	
+	cpu->loadState(file);
+	ppu->loadState(file);
 }

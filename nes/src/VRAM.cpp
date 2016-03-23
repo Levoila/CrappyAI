@@ -32,8 +32,10 @@ void VRAM::load(const std::vector<uint8_t*>& data)
 {
 	if(data.size() == 0) {
 		mem = new uint8_t[0x4000];
+		memSize = 0x4000;
 	} else {
 		mem = new uint8_t[0x2000 + 0x2000 * data.size()];
+		memSize = 0x2000 + 0x2000 * data.size();
 	}
 	
 	if(data.size() != 0) {
@@ -42,6 +44,22 @@ void VRAM::load(const std::vector<uint8_t*>& data)
 	for(int i = 1; i < data.size(); ++i) {
 		memcpy(mem+0x2000 + 0x2000 * i, data[i], 0x2000);
 	}
+}
+
+void VRAM::saveState(std::ostream& os)
+{
+	os.write((char*)(&CHROffset), sizeof(CHROffset));
+	os.write((char*)(&mirroring), sizeof(mirroring));
+
+	os.write((char*)mem, sizeof(char) * memSize);
+}
+
+void VRAM::loadState(std::istream& os)
+{
+	os.read((char*)(&CHROffset), sizeof(CHROffset));
+	os.read((char*)(&mirroring), sizeof(mirroring));
+
+	os.read((char*)mem, sizeof(char) * memSize);
 }
 
 uint16_t VRAM::decode(uint16_t addr) const

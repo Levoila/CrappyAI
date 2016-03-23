@@ -3,6 +3,24 @@
 
 using namespace std;
 
+std::istream& operator>>(std::istream& is, Mirroring& m)
+{
+	int val;
+	
+	if (is >> val) {
+		switch(val) {
+			case VERTICAL:
+			case HORIZONTAL:
+			case FOUR_SCREEN:
+			case SINGLE_SCREEN:
+				m = Mirroring(val);
+				break;
+		}
+	}
+	
+	return is;
+}
+
 NesFileHeader::NesFileHeader(ifstream& file)
 {
    char NES[4];

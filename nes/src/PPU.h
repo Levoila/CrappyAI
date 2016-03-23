@@ -29,6 +29,8 @@ class PPU
       bool isFrameReady();
       void renderWindow();
       uint32_t* getFrame() { return frame; }
+      void saveState(std::ostream& os);
+      void loadState(std::istream& os);
 
 	  void dumpAttributeTables(std::ostream& os) const;
 	  void dumpNametables(std::ostream& os) const;

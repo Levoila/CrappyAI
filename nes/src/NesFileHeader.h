@@ -8,6 +8,8 @@
 
 enum Mirroring  {VERTICAL, HORIZONTAL, FOUR_SCREEN, SINGLE_SCREEN};
 
+std::istream& operator>>(std::istream& is, Mirroring& m);
+
 class NesFileHeader
 {
    public:
