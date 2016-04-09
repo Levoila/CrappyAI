@@ -20,6 +20,8 @@ class CPURam
    void saveState(std::ostream& os);
    void loadState(std::istream& os);
    void setController1(uint8_t state) { controller1State = state; }
+   std::vector<uint16_t> findValue(uint8_t);
+   std::vector<uint16_t> findValue(uint16_t);
 
    private:
    uint8_t mem[0x10001];

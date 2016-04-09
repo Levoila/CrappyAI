@@ -31,4 +31,24 @@ extern "C"
 	{
 		nes->loadState(filename);
 	}
+	
+	void findValue8(NES* nes, uint8_t value)
+	{
+		nes->findValue(value);
+	}
+	
+	void findValue16(NES* nes, uint16_t value)
+	{
+		nes->findValue(value);
+	}
+	
+	uint8_t readMem8(NES* nes, uint16_t addr)
+	{
+		return nes->readMem(addr);
+	}
+	
+	uint16_t readMem16(NES* nes, uint16_t addr)
+	{
+		return nes->readMem(addr) | (nes->readMem(addr+1) << 8);
+	}
 }

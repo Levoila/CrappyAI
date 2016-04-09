@@ -54,6 +54,39 @@ uint8_t CPURam::read(uint16_t address)
    return val;
 }
 
+std::vector<uint16_t> CPURam::findValue(uint8_t value)
+{
+	std::vector<uint16_t> addresses;
+	for (unsigned int i = 0; i < 0x800; ++i) {
+		if (mem[i] == value) {
+			addresses.push_back(i);
+		}
+	}
+	
+	for (auto addr : addresses) {
+		std::cout << std::hex << "Addr : " << addr << std::endl;
+	}
+	
+	return addresses;
+}
+
+std::vector<uint16_t> CPURam::findValue(uint16_t value)
+{
+	std::vector<uint16_t> addresses;
+	for (unsigned int i = 0; i < 0x7FF; ++i) {
+		uint16_t memValue = mem[i] | (mem[i+1] << 8);
+		if (memValue == value) {
+			addresses.push_back(i);
+		}
+	}
+	
+	for (auto addr : addresses) {
+		std::cout << std::hex << "Addr : " << addr << std::endl;
+	}
+	
+	return addresses;
+}
+
 uint32_t CPURam::decode(uint16_t addr, bool w, uint8_t d)
 {
    if(addr < 0x2000) {

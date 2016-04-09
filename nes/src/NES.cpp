@@ -53,10 +53,25 @@ void NES::loadState(std::string filename)
 	std::ifstream file(filename.c_str(), std::ios::binary);
 	
 	if (!file) {
-		std::cout << "File " << filename << "does not exist." << std::endl;
+		std::cout << "File " << filename << " does not exist." << std::endl;
 		return;
 	}
 	
 	cpu->loadState(file);
 	ppu->loadState(file);
+}
+
+std::vector<uint16_t> NES::findValue(uint8_t value)
+{
+	return ram.findValue(value);
+}
+
+std::vector<uint16_t> NES::findValue(uint16_t value)
+{
+	return ram.findValue(value);
+}
+
+uint8_t NES::readMem(uint16_t addr)
+{
+	ram.read(addr);
 }
